@@ -55,5 +55,5 @@ jobs:
         run: |
           echo start
           echo "tag is: ${{ needs.bump_version.outputs.tag }}"
-          echo "image is: ${{IMAGE_NAME}}:${{ needs.bump_version.outputs.tag }}"
+          echo "image is: ${{env.IMAGE_NAME}}:${{ needs.bump_version.outputs.tag }}"
           echo "labels are: ${{ steps.meta.outputs.labels }}"
