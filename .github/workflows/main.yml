@@ -45,3 +45,8 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=pep440,pattern={{version}}
+      - name: Debugging
+        run: |
+          echo start
+          echo "tag is: ${{ needs.bump_version.outputs.tag }}"
+          echo "labels are: ${{ steps.meta.outputs.labels }}"
