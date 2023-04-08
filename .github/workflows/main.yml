@@ -15,7 +15,7 @@ jobs:
   bump_version:
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.version_bump.output.newTag }}
+      tag: ${{ steps.version_bump.outputs.newTag }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
