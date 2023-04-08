@@ -1,0 +1,47 @@
+name: Create and publish a Docker image
+
+on:
+  push:
+    branches: ['main']
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  bump_version:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version_bump.output.newTag }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name:  'Automated Version Bump'
+        id: version_bump
+        uses:  'phips28/gh-action-bump-version@master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          minor-wording:  'add,Adds,new'
+          major-wording:  'MAJOR,cut-major'
+          patch-wording:  'patch,fixes'     # Providing patch-wording will override commits
+                                            # defaulting to a patch bump.
+          rc-wording:     'RELEASE,alpha'
+  build_image:
+    needs: bump_version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=pep440,pattern={{version}}
