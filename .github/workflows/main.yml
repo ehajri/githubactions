@@ -31,6 +31,12 @@ jobs:
           patch-wording:  'patch,fixes'     # Providing patch-wording will override commits
                                             # defaulting to a patch bump.
           rc-wording:     'RELEASE,alpha'
+      - name: Debugging2
+        run: |
+          echo start
+          echo "tag is: ${{ steps.version_bump.outputs.newTag }}"
+          echo "end"
+
   build_image:
     needs: bump_version
     runs-on: ubuntu-latest
